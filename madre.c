@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 void child1(int *pipefd) {
+  printf("Child1 is running\n");
   close(pipefd[0]); // Close read end
 
   // Redirect stdout to the write end of the pipe
@@ -16,6 +17,7 @@ void child1(int *pipefd) {
 }
 
 void child2(int pipe_fd[]) {
+  printf("Child2 is running\n");
   // Close the write end of the pipe
   close(pipe_fd[1]);
 
@@ -45,6 +47,7 @@ int main() {
 
   if (child1_pid == 0) {
     // Child 1
+    printf("Started child1\n");
     child1(pipefd);
   }
 
@@ -55,6 +58,7 @@ int main() {
 
   if (child2_pid == 0) {
     // Child 2
+    printf("Started child1\n");
     child2(pipefd);
   }
 
@@ -64,7 +68,9 @@ int main() {
 
   // Wait for both children to finish
   waitpid(child1_pid, NULL, 0);
+  printf("Child1 has died\n");
   waitpid(child2_pid, NULL, 0);
+  printf("Child2 has died\n");
 
   return 0;
 }
