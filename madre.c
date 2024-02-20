@@ -32,17 +32,15 @@ void child2(int pipe_fd[]) {
 
 int main() {
   int pipefd[2];
-  if (pipe(pipefd) == -1) {
-    perror("pipe");
-    exit(EXIT_FAILURE);
+  if (pipe(pipefd) < 0) {
+    return 1;
   }
 
   pid_t child1_pid, child2_pid;
 
   // Fork off child 1
   if ((child1_pid = fork()) == -1) {
-    perror("fork");
-    exit(EXIT_FAILURE);
+    return 1;
   }
 
   if (child1_pid == 0) {
@@ -51,9 +49,8 @@ int main() {
   }
 
   // Fork off child 2
-  if ((child2_pid = fork()) == -1) {
-    perror("fork");
-    exit(EXIT_FAILURE);
+  if ((child2_pid = fork()) < 0) {
+    return 1;
   }
 
   if (child2_pid == 0) {
